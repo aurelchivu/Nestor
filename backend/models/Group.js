@@ -5,11 +5,11 @@ const Group = db.define('group', {
   name: {
     type: Sequelize.STRING,
   },
-  dateCreated: {
-    type: Sequelize.DATE,
+  createdAt: {
+    type: Sequelize.NOW,
   },
-  dateUpdated: {
-    type: Sequelize.DATE,
+  updatedAt: {
+    type: Sequelize.NOW,
   },
 });
 

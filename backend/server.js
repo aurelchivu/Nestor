@@ -4,7 +4,6 @@ import morgan from 'morgan';
 import cors from 'cors';
 import colors from 'colors';
 import db from './config/database.js'
-import asyncHandler from './middleware/async.js'
 
 // Load environment variables
 dotenv.config();
@@ -16,6 +15,8 @@ db.authenticate()
 
 // Route files
 import home from './routes/home.js';
+import groups from './routes/groups.js';
+import persons from './routes/persons.js';
 
 const app = express();
 
@@ -32,6 +33,8 @@ app.use(cors());
 
 // Mount routers
 app.use('/api', home);
+app.use('/api/groups', groups);
+app.use('/api/persons', persons);
 
 app.use((req, res, next) => {
   res.status(404).send('<h1>Page not found!</h1>');

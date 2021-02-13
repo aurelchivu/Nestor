@@ -11,11 +11,11 @@ const Person = db.define('person', {
   jobTitle: {
     type: Sequelize.STRING,
   },
-  dateCreated: {
-    type: Sequelize.DATE,
+  createdAt: {
+    type: Sequelize.NOW,
   },
-  dateUpdated: {
-    type: Sequelize.DATE,
+  updatedAt: {
+    type: Sequelize.NOW,
   },
 });
 

@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const db = new Sequelize('Nestor', 'postgres', 'antrenoru2021', {
+const db = new Sequelize('Nestor', 'postgres', `${process.env.DATABASE_PASS}`, {
   host: 'localhost',
   dialect: 'postgres',
 
