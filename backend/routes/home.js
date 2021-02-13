@@ -1,9 +1,9 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router({ mergeParams: true });
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
   res.send('<h1>API is running...</h1>');
 });
 
-module.exports = router;
+export default router;

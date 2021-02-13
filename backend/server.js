@@ -1,14 +1,21 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const morgan = require('morgan');
-const cors = require('cors');
-const colors = require('colors');
+import express from 'express';
+import dotenv from 'dotenv';
+import morgan from 'morgan';
+import cors from 'cors';
+import colors from 'colors';
+import db from './config/database.js'
+import asyncHandler from './middleware/async.js'
 
 // Load environment variables
 dotenv.config();
 
+// Test DB
+db.authenticate()
+  .then(() => console.log('Database connected...'.yellow.bold))
+  .catch((err) => console.log('Error: ' + err));
+
 // Route files
-const home = require('./routes/home');
+import home from './routes/home.js';
 
 const app = express();
 
