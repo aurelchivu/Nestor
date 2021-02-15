@@ -1,6 +1,6 @@
 import ErrorResponse from '../utils/ErrorResponse.js';
 import asyncHandler from '../middleware/async.js';
-import Group from '../models/Group.js';
+import { Group } from '../models/Models.js';
 
 // @desc      Create new group
 // @route     POST /api/groups
@@ -50,8 +50,7 @@ export const updateGroup = asyncHandler(async (req, res, next) => {
     );
   }
 
-  await group.save();
-  await group.reload();
+  await group.update(req.body)
 
   res.status(200).json({ success: true, data: group });
 });
