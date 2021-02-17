@@ -51,13 +51,6 @@ const GroupsListScreen = ({ history }) => {
     history.push(`/groups/creategroup`);
   };
 
-  const deleteHandler = (id) => {
-    if (window.confirm('Are you sure?')) {
-      deleteGroup(id);
-
-    }
-  };
-
   return (
     <>
       <Row className='align-items-center'>
@@ -77,34 +70,28 @@ const GroupsListScreen = ({ history }) => {
           <thead>
             <tr>
               <th>NAME</th>
+              <th>ID</th>
               <th>DATE CREATED</th>
               <th>DATE UPDATED</th>
-              <th>BELONGS TO</th>
+              <th>REPORTS TO</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {groupsList ? (
               Object.values(groupsList).map((group) => (
-                
                 <tr key={group.id}>
                   <td>{group.name}</td>
+                  <td>{group.id}</td>
                   <td>{group.createdAt}</td>
                   <td>{group.updatedAt}</td>
-                  <td>{group.reportsTo === null ? 'None' : group.reportsTo}</td>
+                  <td>{group.reportsTo === null ? 0 : group.reportsTo}</td>
                   <td>
                     <LinkContainer to={`/groups/${group.id}/edit`}>
                       <Button variant='light' className='btn-sm'>
                         Edit
                       </Button>
                     </LinkContainer>
-                    <Button
-                      variant='danger'
-                      className='btn-sm'
-                      onClick={() => deleteHandler(group.id)}
-                    >
-                      Delete
-                    </Button>
                   </td>
                 </tr>
               ))

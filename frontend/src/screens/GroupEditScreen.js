@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
 
-const GroupEditScreen = ({ match, history }) => {
+const GroupEditScreen = ({ match }) => {
   const groupId = match.params.id;
 
   const [name, setName] = useState('');
-  const [belongsTo, setBelongsTo] = useState('');
+  const [reportsTo, setReportsTo] = useState();
 
   const getGroupDetails = async (id) => {
     try {
@@ -24,13 +24,13 @@ const GroupEditScreen = ({ match, history }) => {
       );
 
       setName(data.data.name);
-      setBelongsTo(data.data.belongsTo);
+      setReportsTo(data.data.reportsTo);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const updateGroup = async (name, belongsTo, id) => {
+  const updateGroup = async (name, reportsTo, id) => {
     try {
       const config = {
         headers: {
@@ -40,7 +40,7 @@ const GroupEditScreen = ({ match, history }) => {
 
       await axios.put(
         `http://localhost:5000/api/groups/${id}`,
-        { name, belongsTo },
+        { name, reportsTo },
         config
       );
     } catch (error) {
@@ -48,27 +48,13 @@ const GroupEditScreen = ({ match, history }) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (successUpdate) {
-  //     history.push('/groups');
-  //   } else {
-  //     if (!group.name || group.id !== groupId) {
-  //       getGroupDetails(groupId);
-  //     } else {
-  //       setName(group.name);
-  //       setBelongsTo(group.belongsTo);
-  //     }
-  //   }
-  // }, [history, groupId, successUpdate]);
-
   useEffect(() => {
     getGroupDetails(groupId);
   }, []);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    updateGroup(name, belongsTo, groupId);
-    // history.push(`/groups`);
+    updateGroup(name, reportsTo, groupId);
   };
 
   return (
@@ -88,15 +74,17 @@ const GroupEditScreen = ({ match, history }) => {
               onChange={(e) => setName(e.target.value)}
             ></Form.Control>
           </Form.Group>
-          <Form.Group controlId='Belongs to'>
-            <Form.Label>Move to</Form.Label>
+
+          <Form.Group controlId='Reports to'>
+            <Form.Label>Reports to - Group ID</Form.Label>
             <Form.Control
               type='name'
-              placeholder='Belongs to'
-              value={belongsTo}
-              onChange={(e) => setBelongsTo(e.target.value)}
+              placeholder='Reports to'
+              value={reportsTo}
+              onChange={(e) => setReportsTo(e.target.value)}
             ></Form.Control>
           </Form.Group>
+
           <Button type='submit' variant='primary'>
             Update Group
           </Button>

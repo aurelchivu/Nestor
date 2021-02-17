@@ -4,8 +4,18 @@ import db from '../config/database.js';
 export const Group = db.define(
   'groupTable',
   {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     name: {
       type: Sequelize.STRING,
+      unique: true,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     reportsTo: {
       type: Sequelize.INTEGER,
@@ -14,36 +24,70 @@ export const Group = db.define(
   { timestamp: true }
 );
 
-// Group.sync();
+Group.sync();
 
 export const Person = db.define(
   'personTable',
   {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     firstName: {
       type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     lastName: {
       type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     jobTitle: {
       type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
-    groupTableId: {
-      type: Sequelize.INTEGER,
+    groupName: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
       references: {
         model: Group,
-        key: 'id',
+        key: 'name',
       },
     },
   },
   { timestamp: true }
 );
 
-// Person.sync();
+Person.sync();
 
-Group.hasMany(Person, { onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-// Group.hasMany(Group);
-Person.belongsTo(Group);
+Group.hasMany(Person, {
+  foreignKey: 'groupName',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
 
-// To prevent cyclic dependencies in Node.js,
-// all the models are in the same file
+Group.hasMany(Group, {
+  foreignKey: 'reportsTo',
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+});
+
+Group.belongsTo(Group, {
+  foreignKey: 'reportsTo',
+});
+
+Person.belongsTo(Group, {
+  foreignKey: 'groupName',
+});

@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
 
-const GroupCreateScreen = ({ history }) => {
+const GroupCreateScreen = () => {
   const [name, setName] = useState('');
-  const [belongsTo, setBelongsTo] = useState('');
+  const [reportsTo, setReportsTo] = useState();
 
-  const createGroup = async (name) => {
+  const createGroup = async (name, reportsTo) => {
     try {
       const config = {
         headers: {
@@ -16,7 +16,14 @@ const GroupCreateScreen = ({ history }) => {
         },
       };
 
-      await axios.post(`http://localhost:5000/api/groups`, { name }, config);
+      await axios.post(
+        `http://localhost:5000/api/groups`,
+        {
+          name,
+          reportsTo,
+        },
+        config
+      );
     } catch (error) {
       console.log(error);
     }
@@ -24,9 +31,9 @@ const GroupCreateScreen = ({ history }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    createGroup(name);
+    createGroup(name, reportsTo);
     setName('');
-    history.push(`/groups`);
+    setReportsTo(1);
   };
 
   return (
@@ -52,8 +59,8 @@ const GroupCreateScreen = ({ history }) => {
             <Form.Control
               type='Belongs to'
               placeholder='Belongs To'
-              value={belongsTo}
-              onChange={(e) => setBelongsTo(e.target.value)}
+              value={reportsTo}
+              onChange={(e) => setReportsTo(e.target.value)}
             ></Form.Control>
           </Form.Group>
           <Button type='submit' variant='primary'>

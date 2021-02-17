@@ -87,7 +87,7 @@ const PeopleListScreen = ({ history }) => {
                   <td>{person.firstName}</td>
                   <td>{person.lastName}</td>
                   <td>{person.jobTitle}</td>
-                  <td>{person.groupTableId}</td>
+                  <td>{person.groupName}</td>
                   <td>{person.createdAt}</td>
                   <td>{person.updatedAt}</td>
                   <td>
@@ -96,13 +96,6 @@ const PeopleListScreen = ({ history }) => {
                         Edit
                       </Button>
                     </LinkContainer>
-                    <Button
-                      variant='danger'
-                      className='btn-sm'
-                      onClick={() => deleteHandler(person.id)}
-                    >
-                      Delete
-                    </Button>
                   </td>
                 </tr>
               ))

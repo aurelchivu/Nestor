@@ -4,13 +4,15 @@ import { Link } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
 
-const PeopleCreateScreen = ({ history }) => {
+const PeopleEditScreen = ({ match, history }) => {
+  const personId = match.params.id;
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [jobTitle, setJobTitle] = useState('');
   const [groupName, setGroupName] = useState('');
 
-  const createPeople = async (firstName, lastName, jobTitle, groupName) => {
+  const getPeopleDetails = async (id) => {
     try {
       const config = {
         headers: {
@@ -18,14 +20,30 @@ const PeopleCreateScreen = ({ history }) => {
         },
       };
 
-      await axios.post(
-        `http://localhost:5000/api/persons`,
-        {
-          firstName,
-          lastName,
-          jobTitle,
-          groupName,
+      const { data } = await axios.get(
+        `http://localhost:5000/api/persons/${id}`,
+        config
+      );
+      setFirstName(data.data.firstName);
+      setLastName(data.data.lastName);
+      setJobTitle(data.data.jobTitle);
+      setGroupName(data.data.groupName);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updatePeople = async (firstName, lastName, jobTitle, groupName, id) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
         },
+      };
+
+      await axios.put(
+        `http://localhost:5000/api/persons/${id}`,
+        { firstName, lastName, jobTitle, groupName },
         config
       );
     } catch (error) {
@@ -33,9 +51,13 @@ const PeopleCreateScreen = ({ history }) => {
     }
   };
 
+  useEffect(() => {
+    getPeopleDetails(personId);
+  }, []);
+
   const submitHandler = (e) => {
     e.preventDefault();
-    createPeople(firstName, lastName, jobTitle, groupName);
+    updatePeople(firstName, lastName, jobTitle, groupName, personId);
   };
 
   return (
@@ -44,7 +66,7 @@ const PeopleCreateScreen = ({ history }) => {
         Go Back
       </Link>
       <FormContainer>
-        <h3>Create Person</h3>
+        <h3>Edit Person</h3>
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='first name'>
             <Form.Label>First Name</Form.Label>
@@ -76,7 +98,7 @@ const PeopleCreateScreen = ({ history }) => {
             ></Form.Control>
           </Form.Group>
 
-          <Form.Group controlId='Belongs to'>
+          <Form.Group controlId='Group'>
             <Form.Label>Group</Form.Label>
             <Form.Control
               type='name'
@@ -85,9 +107,9 @@ const PeopleCreateScreen = ({ history }) => {
               onChange={(e) => setGroupName(e.target.value)}
             ></Form.Control>
           </Form.Group>
-
+          
           <Button type='submit' variant='primary'>
-            Create Person
+            Update Person
           </Button>
         </Form>
       </FormContainer>
@@ -95,4 +117,4 @@ const PeopleCreateScreen = ({ history }) => {
   );
 };
 
-export default PeopleCreateScreen;
+export default PeopleEditScreen;
