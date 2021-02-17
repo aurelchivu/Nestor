@@ -1,10 +1,13 @@
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import GroupsScreen from './screens/GroupsScreen';
+import GroupCreateScreen from './screens/GroupCreateScreen';
+import GroupEditScreen from './screens/GroupEditScreen'
+import GroupsListScreen from './screens/GroupsListScreen';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
-import PeopleScreen from './screens/PeopleScreen';
+import PeopleListScreen from './screens/PeopleListScreen';
+import PeopleCreateScreen from './screens/PeopleCreateScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import { Container } from 'react-bootstrap';
 
@@ -15,8 +18,15 @@ const App = () => {
       <main className='py-3'>
         <Container>
           <Route path='/' component={HomeScreen} exact />
-          <Route path='/groups' component={GroupsScreen} />
-          <Route path='/people' component={PeopleScreen} />
+          <Route path='/groups/:id/edit' component={GroupEditScreen} />
+          <Route path='/groups/creategroup' component={GroupCreateScreen} />
+          <Route path='/groups' component={GroupsListScreen} exact />
+          <Route
+            path='/people/createpeople'
+            component={PeopleCreateScreen}
+            exact
+          />
+          <Route path='/people' component={PeopleListScreen} exact />
           <Route path='/login' component={LoginScreen} />
           <Route path='/register' component={RegisterScreen} />
         </Container>
@@ -27,3 +37,4 @@ const App = () => {
 };
 
 export default App;
+
