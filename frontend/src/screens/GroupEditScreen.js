@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
 
-const GroupEditScreen = ({ match }) => {
+const GroupEditScreen = ({ history, match }) => {
   const groupId = match.params.id;
 
   const [name, setName] = useState('');
@@ -55,6 +55,8 @@ const GroupEditScreen = ({ match }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     updateGroup(name, reportsTo, groupId);
+    setName('');
+    setReportsTo(0);
   };
 
   return (

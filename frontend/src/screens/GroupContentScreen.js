@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Moment from 'react-moment';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 
-const GroupsListScreen = ({ history }) => {
+const GroupContentScreen = ({ match }) => {
+  const groupId = match.params.id;
 
   const [groupsList, setGroupsList] = useState([]);
 
@@ -22,6 +24,7 @@ const GroupsListScreen = ({ history }) => {
       );
 
       setGroupsList(data.data);
+      console.log(data.data);
     } catch (error) {
       console.log(error);
     }
@@ -31,9 +34,9 @@ const GroupsListScreen = ({ history }) => {
     listGroups();
   }, []);
 
-  const createGroupHandler = () => {
-    history.push(`/groups/creategroup`);
-  };
+  const groups =
+    groupsList.filter((g) => g.reportsTo === match.params.id) || [];
+  console.log(groups);
 
   return (
     <>
@@ -41,13 +44,9 @@ const GroupsListScreen = ({ history }) => {
         <Col>
           <h3>Groups</h3>
         </Col>
-        <Col className='text-right'>
-          <LinkContainer to={`/groups/creategroup`}>
-            <Button className='my-3' onClick={createGroupHandler}>
-              <i className='fas fa-plus'></i> Create Group
-            </Button>
-          </LinkContainer>
-        </Col>
+        <Link to='/groups' className='btn btn-light my-3'>
+          Go Back
+        </Link>
       </Row>
       <>
         <Table striped bordered hover dataponsive className='table-sm'>
@@ -63,9 +62,9 @@ const GroupsListScreen = ({ history }) => {
           </thead>
           <tbody>
             {groupsList ? (
-              Object.values(groupsList).map((group) => (
+              groups.map((group) => (
                 <tr key={group.id}>
-                  <LinkContainer to={`/groups/${group.id}/content`}>
+                  <LinkContainer to={`/groups/${group.name}/people`}>
                     <td>{group.name}</td>
                   </LinkContainer>
                   <td>{group.id}</td>
@@ -75,13 +74,6 @@ const GroupsListScreen = ({ history }) => {
                   </td>
                   <td>
                     <Moment>{group.updatedAt}</Moment>
-                  </td>
-                  <td>
-                    <LinkContainer to={`/groups/${group.id}/edit`}>
-                      <Button variant='light' className='btn-sm'>
-                        Edit
-                      </Button>
-                    </LinkContainer>
                   </td>
                 </tr>
               ))
@@ -95,6 +87,4 @@ const GroupsListScreen = ({ history }) => {
   );
 };
 
-export default GroupsListScreen;
-
-
+export default GroupContentScreen;

@@ -4,11 +4,12 @@ import Moment from 'react-moment';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 
-const GroupsListScreen = ({ history }) => {
+const PeopleByGroupScreen = ({ match }) => {
+  const groupName = match.params.name;
 
-  const [groupsList, setGroupsList] = useState([]);
+  const [peopleList, setPeopleList] = useState([]);
 
-  const listGroups = async () => {
+  const listPeopleByGroup = async (groupName) => {
     try {
       const config = {
         headers: {
@@ -17,67 +18,60 @@ const GroupsListScreen = ({ history }) => {
       };
 
       const { data } = await axios.get(
-        `http://localhost:5000/api/groups`,
+        `http://localhost:5000/api/persons/`,
+        { groupName },
         config
       );
 
-      setGroupsList(data.data);
+      setPeopleList(data.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    listGroups();
+    listPeopleByGroup();
   }, []);
 
-  const createGroupHandler = () => {
-    history.push(`/groups/creategroup`);
-  };
+  const people =
+    peopleList.filter((p) => p.groupName === match.params.name) || [];
 
   return (
     <>
       <Row className='align-items-center'>
         <Col>
-          <h3>Groups</h3>
-        </Col>
-        <Col className='text-right'>
-          <LinkContainer to={`/groups/creategroup`}>
-            <Button className='my-3' onClick={createGroupHandler}>
-              <i className='fas fa-plus'></i> Create Group
-            </Button>
-          </LinkContainer>
+          <h3>{groupName}</h3>
         </Col>
       </Row>
       <>
         <Table striped bordered hover dataponsive className='table-sm'>
           <thead>
             <tr>
-              <th>NAME</th>
-              <th>ID</th>
-              <th>REPORTS TO</th>
+              <th>FIRST NAME</th>
+              <th>LAST NAME</th>
+              <th>JOB TITLE</th>
+              <th>GROUP</th>
               <th>DATE ADDED</th>
               <th>DATE UPDATED</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {groupsList ? (
-              Object.values(groupsList).map((group) => (
-                <tr key={group.id}>
-                  <LinkContainer to={`/groups/${group.id}/content`}>
-                    <td>{group.name}</td>
-                  </LinkContainer>
-                  <td>{group.id}</td>
-                  <td>{group.reportsTo}</td>
+            {people ? (
+              people.map((person) => (
+                <tr key={person.id}>
+                  <td>{person.firstName}</td>
+                  <td>{person.lastName}</td>
+                  <td>{person.jobTitle}</td>
+                  <td>{person.groupName}</td>
                   <td>
-                    <Moment>{group.createdAt}</Moment>
+                    <Moment>{person.createdAt}</Moment>
                   </td>
                   <td>
-                    <Moment>{group.updatedAt}</Moment>
+                    <Moment>{person.updatedAt}</Moment>
                   </td>
                   <td>
-                    <LinkContainer to={`/groups/${group.id}/edit`}>
+                    <LinkContainer to={`/people/${person.id}/edit`}>
                       <Button variant='light' className='btn-sm'>
                         Edit
                       </Button>
@@ -95,6 +89,4 @@ const GroupsListScreen = ({ history }) => {
   );
 };
 
-export default GroupsListScreen;
-
-
+export default PeopleByGroupScreen;

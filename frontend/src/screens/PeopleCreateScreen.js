@@ -36,6 +36,10 @@ const PeopleCreateScreen = ({ history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     createPeople(firstName, lastName, jobTitle, groupName);
+    setFirstName('');
+    setLastName('');
+    setJobTitle('');
+    setGroupName('');
   };
 
   return (

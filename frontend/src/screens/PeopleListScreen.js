@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Moment from 'react-moment';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 
@@ -25,32 +26,12 @@ const PeopleListScreen = ({ history }) => {
     }
   };
 
-  const deletePeople = async (id) => {
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
-
-      await axios.delete(`http://localhost:5000/api/persons/${id}`, config);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     listPeople();
   }, []);
 
   const createPeopleHandler = () => {
     history.push(`/people/createpeople`);
-  };
-
-  const deleteHandler = (id) => {
-    if (window.confirm('Are you sure?')) {
-      deletePeople(id);
-    }
   };
 
   return (
@@ -88,8 +69,12 @@ const PeopleListScreen = ({ history }) => {
                   <td>{person.lastName}</td>
                   <td>{person.jobTitle}</td>
                   <td>{person.groupName}</td>
-                  <td>{person.createdAt}</td>
-                  <td>{person.updatedAt}</td>
+                  <td>
+                    <Moment>{person.createdAt}</Moment>
+                  </td>
+                  <td>
+                    <Moment>{person.updatedAt}</Moment>
+                  </td>
                   <td>
                     <LinkContainer to={`/people/${person.id}/edit`}>
                       <Button variant='light' className='btn-sm'>
@@ -110,5 +95,3 @@ const PeopleListScreen = ({ history }) => {
 };
 
 export default PeopleListScreen;
-
-// PeopleListScreen

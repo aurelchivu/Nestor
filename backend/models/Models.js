@@ -24,7 +24,7 @@ export const Group = db.define(
   { timestamp: true }
 );
 
-Group.sync();
+// Group.sync();
 
 export const Person = db.define(
   'personTable',
@@ -70,7 +70,7 @@ export const Person = db.define(
   { timestamp: true }
 );
 
-Person.sync();
+// Person.sync();
 
 Group.hasMany(Person, {
   foreignKey: 'groupName',

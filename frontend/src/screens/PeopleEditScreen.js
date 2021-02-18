@@ -58,6 +58,10 @@ const PeopleEditScreen = ({ match, history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     updatePeople(firstName, lastName, jobTitle, groupName, personId);
+    setFirstName('');
+    setLastName('');
+    setJobTitle('');
+    setGroupName('');
   };
 
   return (
