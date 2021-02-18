@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Moment from 'react-moment';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 
 const GroupContentScreen = ({ history, match }) => {
-  const groupId = match.params.id;
 
   const [name, setName] = useState('');
-  const [reportsTo, setReportsTo] = useState();
   const [groupsList, setGroupsList] = useState([]);
   const [group, setGroup] = useState({});
 
@@ -27,7 +24,6 @@ const GroupContentScreen = ({ history, match }) => {
       );
 
       setName(data.data.name);
-      setReportsTo(data.data.reportsTo);
       setGroup(data.data);
     } catch (error) {
       console.log(error);
@@ -58,7 +54,7 @@ const GroupContentScreen = ({ history, match }) => {
     listGroups();
   }, []);
 
-  let groups = groupsList.filter((g) => g.reportsTo == match.params.id);
+  let groups = groupsList.filter((g) => (g.reportsTo == match.params.id) && g.name != group.name);
   groups = [group, ...groups];
 
   return (

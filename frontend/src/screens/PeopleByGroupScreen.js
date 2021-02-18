@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Moment from 'react-moment';
 import { LinkContainer } from 'react-router-bootstrap';
