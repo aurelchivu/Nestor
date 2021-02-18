@@ -43,7 +43,7 @@ const PeopleListScreen = ({ history }) => {
         <Col className='text-right'>
           <LinkContainer to={`/people/createpeople`}>
             <Button className='my-3' onClick={createPeopleHandler}>
-              <i className='fas fa-plus'></i> Create Person
+              <i className='fas fa-plus'></i> Add Person
             </Button>
           </LinkContainer>
         </Col>

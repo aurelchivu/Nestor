@@ -72,7 +72,7 @@ const GroupContentScreen = ({ history, match }) => {
         <Table striped bordered hover dataponsive className='table-sm'>
           <thead>
             <tr>
-              <th>NAME</th>
+              <th>GROUP</th>
               <th>ID</th>
               <th>REPORTS TO</th>
               <th>DATE ADDED</th>

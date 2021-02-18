@@ -48,7 +48,7 @@ const PeopleCreateScreen = ({ history }) => {
         Go Back
       </Link>
       <FormContainer>
-        <h3>Create Person</h3>
+        <h3>Add Person</h3>
         <Form onSubmit={submitHandler}>
           <Form.Group controlId='first name'>
             <Form.Label>First Name</Form.Label>
@@ -91,7 +91,7 @@ const PeopleCreateScreen = ({ history }) => {
           </Form.Group>
 
           <Button type='submit' variant='primary'>
-            Create Person
+            Add Person
           </Button>
         </Form>
       </FormContainer>
