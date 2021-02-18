@@ -25,7 +25,6 @@ const App = () => {
           <Route
             path='/groups/:id/content'
             component={GroupContentScreen}
-            exact
           />
           <Route
             path='/groups/creategroup'

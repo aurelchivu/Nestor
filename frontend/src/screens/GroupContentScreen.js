@@ -5,10 +5,34 @@ import Moment from 'react-moment';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 
-const GroupContentScreen = ({ match }) => {
+const GroupContentScreen = ({ history, match }) => {
   const groupId = match.params.id;
 
+  const [name, setName] = useState('');
+  const [reportsTo, setReportsTo] = useState();
   const [groupsList, setGroupsList] = useState([]);
+  const [group, setGroup] = useState({});
+
+  const getGroupById = async (id) => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const { data } = await axios.get(
+        `http://localhost:5000/api/groups/${id}`,
+        config
+      );
+
+      setName(data.data.name);
+      setReportsTo(data.data.reportsTo);
+      setGroup(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const listGroups = async () => {
     try {
@@ -24,29 +48,25 @@ const GroupContentScreen = ({ match }) => {
       );
 
       setGroupsList(data.data);
-      console.log(data.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
+    getGroupById(match.params.id);
     listGroups();
   }, []);
 
-  const groups =
-    groupsList.filter((g) => g.reportsTo === match.params.id) || [];
-  console.log(groups);
+  let groups = groupsList.filter((g) => g.reportsTo == match.params.id);
+  groups = [group, ...groups];
 
   return (
     <>
       <Row className='align-items-center'>
         <Col>
-          <h3>Groups</h3>
+          <h3>{name}</h3>
         </Col>
-        <Link to='/groups' className='btn btn-light my-3'>
-          Go Back
-        </Link>
       </Row>
       <>
         <Table striped bordered hover dataponsive className='table-sm'>
@@ -61,27 +81,33 @@ const GroupContentScreen = ({ match }) => {
             </tr>
           </thead>
           <tbody>
-            {groupsList ? (
-              groups.map((group) => (
-                <tr key={group.id}>
-                  <LinkContainer to={`/groups/${group.name}/people`}>
-                    <td>{group.name}</td>
+            {groups.map((group) => (
+              <tr key={group.id}>
+                <LinkContainer to={`/groups/${group.name}/people`}>
+                  <td>{group.name}</td>
+                </LinkContainer>
+                <td>{group.id}</td>
+                <td>{group.reportsTo}</td>
+                <td>
+                  <Moment>{group.createdAt}</Moment>
+                </td>
+                <td>
+                  <Moment>{group.updatedAt}</Moment>
+                </td>
+                <td>
+                  <LinkContainer to={`/groups/${group.id}/edit`}>
+                    <Button variant='light' className='btn-sm'>
+                      Edit
+                    </Button>
                   </LinkContainer>
-                  <td>{group.id}</td>
-                  <td>{group.reportsTo}</td>
-                  <td>
-                    <Moment>{group.createdAt}</Moment>
-                  </td>
-                  <td>
-                    <Moment>{group.updatedAt}</Moment>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <div>Loading...</div>
-            )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
+        <Button onClick={() => history.goBack()} className='btn btn-light my-3'>
+          Go Back
+        </Button>
       </>
     </>
   );

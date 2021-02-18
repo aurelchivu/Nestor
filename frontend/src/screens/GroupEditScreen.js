@@ -61,9 +61,9 @@ const GroupEditScreen = ({ history, match }) => {
 
   return (
     <>
-      <Link to='/groups' className='btn btn-light my-3'>
+      <Button onClick={() => history.goBack()} className='btn btn-light my-3'>
         Go Back
-      </Link>
+      </Button>
       <FormContainer>
         <h3>Edit Group</h3>
         <Form onSubmit={submitHandler}>

@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Moment from 'react-moment';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Row, Col } from 'react-bootstrap';
 
-const PeopleByGroupScreen = ({ match }) => {
+const PeopleByGroupScreen = ({ history, match }) => {
   const groupName = match.params.name;
 
   const [peopleList, setPeopleList] = useState([]);
 
-  const listPeopleByGroup = async (groupName) => {
+  const listPeopleByGroup = async () => {
     try {
       const config = {
         headers: {
@@ -19,7 +20,6 @@ const PeopleByGroupScreen = ({ match }) => {
 
       const { data } = await axios.get(
         `http://localhost:5000/api/persons/`,
-        { groupName },
         config
       );
 
@@ -33,8 +33,7 @@ const PeopleByGroupScreen = ({ match }) => {
     listPeopleByGroup();
   }, []);
 
-  const people =
-    peopleList.filter((p) => p.groupName === match.params.name) || [];
+  const people = peopleList.filter((p) => p.groupName === match.params.name);
 
   return (
     <>
@@ -57,33 +56,32 @@ const PeopleByGroupScreen = ({ match }) => {
             </tr>
           </thead>
           <tbody>
-            {people ? (
-              people.map((person) => (
-                <tr key={person.id}>
-                  <td>{person.firstName}</td>
-                  <td>{person.lastName}</td>
-                  <td>{person.jobTitle}</td>
-                  <td>{person.groupName}</td>
-                  <td>
-                    <Moment>{person.createdAt}</Moment>
-                  </td>
-                  <td>
-                    <Moment>{person.updatedAt}</Moment>
-                  </td>
-                  <td>
-                    <LinkContainer to={`/people/${person.id}/edit`}>
-                      <Button variant='light' className='btn-sm'>
-                        Edit
-                      </Button>
-                    </LinkContainer>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <div>Loading...</div>
-            )}
+            {people.map((person) => (
+              <tr key={person.id}>
+                <td>{person.firstName}</td>
+                <td>{person.lastName}</td>
+                <td>{person.jobTitle}</td>
+                <td>{person.groupName}</td>
+                <td>
+                  <Moment>{person.createdAt}</Moment>
+                </td>
+                <td>
+                  <Moment>{person.updatedAt}</Moment>
+                </td>
+                <td>
+                  <LinkContainer to={`/people/${person.id}/edit`}>
+                    <Button variant='light' className='btn-sm'>
+                      Edit
+                    </Button>
+                  </LinkContainer>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
+        <Button onClick={() => history.goBack()} className='btn btn-light my-3'>
+          Go Back
+        </Button>
       </>
     </>
   );

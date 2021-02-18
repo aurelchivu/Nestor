@@ -22,6 +22,7 @@ const GroupsListScreen = ({ history }) => {
       );
 
       setGroupsList(data.data);
+      
     } catch (error) {
       console.log(error);
     }
